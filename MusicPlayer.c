@@ -45,12 +45,13 @@ void printMusic(){
 
 }
 
-void insertAtTail(char *link) {
+void insertAtTail(struct Player *current,char *link) {
     struct Player* temp = head;
     struct Player* newNode = createNewNode(link);
 
     if(head == NULL) {
         head = newNode;
+        current = head;
         return;
     }
     while(temp->next != NULL) temp = temp->next; // Go To last Node
@@ -143,8 +144,7 @@ int main() {
         else if(sscanf(nick,"%999s", link) != 0)
         {
             printf("Adding %s..\n",link);
-            insertAtTail(link);
-            current = head;
+            insertAtTail(current,link);
         }
     }
 
