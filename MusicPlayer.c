@@ -3,7 +3,7 @@
 #include <string.h>
 #include <rpc.h>
 
-/*  MUSIC PLAYER IN C
+/*  MUSIC PLAYER IN C with Doubly Linked List
  *
  * Look my Github Account for Projects about Machine Learning,Cyber Security,Python...
  * Other Projects : https://github.com/aydinnyunus
