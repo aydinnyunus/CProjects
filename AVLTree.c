@@ -24,15 +24,12 @@ Node *rightRotate(Node *root){
     Node *temp = root->left;
     Node *temp1 = temp->right;
 
-    // Perform rotation
     temp->right = root;
     root->left = temp1;
 
-    //  Update heights
     root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
     temp->height = MAX(findHeight(temp->left), findHeight(temp->right)) + 1;
 
-    // Return new root
     return temp;
 }
 
@@ -40,15 +37,12 @@ Node *leftRotate(Node *root) {
     Node *temp = root->right;
     Node *temp1 = temp->left;
 
-    // Perform rotation
     temp->left = root;
     root->right = temp1;
 
-    //  Update heights
     root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
     temp->height = MAX(findHeight(temp->left), findHeight(temp->right)) + 1;
 
-    // Return new root
     return temp;
 }
 
