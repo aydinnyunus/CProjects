@@ -135,13 +135,17 @@ int main(void)
 
     Node *root = NULL;
 
-    /* Constructing tree given in the above figure */
     root = addNode(root, 10);
     root = addNode(root, 20);
     root = addNode(root, 30);
     root = addNode(root, 40);
     root = addNode(root, 50);
     root = addNode(root, 25);
+    root = addNode(root, 13);
+    root = addNode(root, 60);
+    root = addNode(root, 1);
+    root = addNode(root, 9);
+    
 
     /* PRINT THE TREE*/
 
