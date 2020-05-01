@@ -20,13 +20,13 @@ int findHeight(Node *root){
 
 }
 
-Node* find_minimum(struct node *root)
+Node* findMinimum(struct node *root)
 {
     if(root == NULL)
         return NULL;
 
     else if(root->left != NULL)
-        return find_minimum(root->left);
+        return findMinimum(root->left);
 
     return root;
 }
@@ -177,7 +177,7 @@ Node* deleteNode(Node* root, int data)
         }
         else
         {
-            Node* temp = find_minimum(root->right);
+            Node* temp = findMinimum(root->right);
             root->data = temp->data;
             root->right = deleteNode(root->right, temp->data);
         }
