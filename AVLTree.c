@@ -33,10 +33,9 @@ Node* findMinimum(struct node *root)
 
 Node *rightRotate(Node *root){
     Node *temp = root->left;
-    Node *temp1 = temp->right;
 
     temp->right = root;
-    root->left = temp1;
+    root->left = temp->right;
 
     root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
     temp->height = MAX(findHeight(temp->left), findHeight(temp->right)) + 1;
@@ -46,10 +45,9 @@ Node *rightRotate(Node *root){
 
 Node *leftRotate(Node *root) {
     Node *temp = root->right;
-    Node *temp1 = temp->left;
 
     temp->left = root;
-    root->right = temp1;
+    root->right = temp->left;
 
     root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
     temp->height = MAX(findHeight(temp->left), findHeight(temp->right)) + 1;
