@@ -20,6 +20,17 @@ int findHeight(Node *root){
 
 }
 
+Node* find_minimum(struct node *root)
+{
+    if(root == NULL)
+        return NULL;
+
+    else if(root->left != NULL)
+        return find_minimum(root->left);
+
+    return root;
+}
+
 Node *rightRotate(Node *root){
     Node *temp = root->left;
     Node *temp1 = temp->right;
@@ -88,13 +99,13 @@ Node *addNode(Node *root,int data){
     if(difference > 1 && data > root->left->data)
     {
         root->left =  leftRotate(root->left);
-        return leftRotate(root);
+        return rightRotate(root);
     }
 
     if(difference < -1 && data < root->right->data)
     {
         root->right = rightRotate(root->right);
-        return rightRotate(root);
+        return leftRotate(root);
 
     }
 
@@ -127,6 +138,77 @@ void postOrder(Node *root){
     }
 }
 
+Node* deleteNode(Node* root, int data)
+{
+    if (root == NULL)
+        return root;
+
+    if (data < root->data)
+        root->left = deleteNode(root->left, data);
+
+    else if(data > root->data)
+        root->right = deleteNode(root->right, data);
+
+    else
+    {
+        if((root->left == NULL) || (root->right == NULL))
+        {
+            Node *temp = root->left ? root->left :
+                         root->right;
+
+            /*
+             * if(root->left != NULL)
+            {
+                Node *temp = root->left;
+            } else
+            {
+                Node *temp = root->right;
+            }
+             */
+
+            if (temp == NULL)
+            {
+                temp = root;
+                root = NULL;
+            }
+            else
+                *root = *temp;
+            free(temp);
+        }
+        else
+        {
+            Node* temp = find_minimum(root->right);
+            root->data = temp->data;
+            root->right = deleteNode(root->right, temp->data);
+        }
+    }
+
+    if (root == NULL)
+        return root;
+
+    root->height = 1 + MAX(findHeight(root->left),findHeight(root->right));
+    int balance = diffRNL(root);
+
+    if (balance > 1 && diffRNL(root->left) >= 0)
+        return rightRotate(root);
+
+    if (balance > 1 && diffRNL(root->left) < 0)
+    {
+        root->left =  leftRotate(root->left);
+        return rightRotate(root);
+    }
+
+    if (balance < -1 && diffRNL(root->right) <= 0)
+        return leftRotate(root);
+
+    if (balance < -1 && diffRNL(root->right) > 0)
+    {
+        root->right = rightRotate(root->right);
+        return leftRotate(root);
+    }
+
+    return root;
+}
 
 int main(void)
 {
@@ -135,17 +217,15 @@ int main(void)
 
     Node *root = NULL;
 
+    /* Constructing tree given in the above figure */
     root = addNode(root, 10);
     root = addNode(root, 20);
-    root = addNode(root, 30);
-    root = addNode(root, 40);
-    root = addNode(root, 50);
     root = addNode(root, 25);
-    root = addNode(root, 13);
+    root = addNode(root, 30);
+    root = addNode(root, 50);
     root = addNode(root, 60);
-    root = addNode(root, 1);
-    root = addNode(root, 9);
-    
+    root = addNode(root, 40);
+    deleteNode(root,50);
 
     /* PRINT THE TREE*/
 
