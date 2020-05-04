@@ -1,90 +1,79 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <time.h>
 
 #define CAP 3
-#define ERR_VAL -99
-#define MAX(a,b) (((a)>(b))?(a):(b)) // If A>B return A else return B
+#define MAX(a, b) (((a)>(b))?(a):(b)) // If A>B return A else return B
 
 
-typedef struct node{
+typedef struct node {
     struct node *left;
     struct node *right;
     struct node *middle;
     int height;
     char *data[CAP];
-}Node;
+} Node;
 
 
-int findHeight(Node *root){
-    if(root == NULL)
+int findHeight(Node *root) {
+    if (root == NULL)
         return -1;
     return root->height;
 
 }
 
-int search(Node *root, int data){
-    if(root == NULL){
-        printf("%d is not founded\n",data);
+int search(Node *root, int data) {
+    if (root == NULL) {
+        printf("%d is not founded\n", data);
         return data;
     }
-    if(root->data[0] && root->data[1]){
-        if((char *) data < root->data[0])
-        {
-            if((char *) data == root->data[0] || (char *) data == root->data[1] ){
-                printf("%d is founded\n",data);
+    if (root->data[0] && root->data[1]) {
+        if ((char *) data < root->data[0]) {
+            if ((char *) data == root->data[0] || (char *) data == root->data[1]) {
+                printf("%d is founded\n", data);
                 return data;
             }
-            search(root->left,data);
+            search(root->left, data);
+        } else if ((char *) data > root->data[0] && (char *) data < root->data[1]) {
+            if ((char *) data == root->data[0] || (char *) data == root->data[1]) {
+                printf("%d is founded\n", data);
+                return data;
+            }
+            search(root->middle, data);
+        } else if ((char *) data > root->data[1]) {
+            if ((char *) data == root->data[0] || (char *) data == root->data[1]) {
+                printf("%d is founded\n", data);
+                return data;
+            }
+            search(root->right, data);
+        } else {
+            printf("%d is founded\n", data);
+            return data;
         }
-
-        else if((char *) data > root->data[0] && (char *) data < root->data[1]){
-            if((char *) data == root->data[0] || (char *) data == root->data[1] ){
-                printf("%d is founded\n",data);
+    } else if (root->data[0] && root->data[1] == NULL) {
+        if ((char *) data < root->data[0]) {
+            if ((char *) data == root->data[0]) {
+                printf("%d is founded\n", data);
                 return data;
             }
-            search(root->middle,data);
+            search(root->left, data);
+        } else if ((char *) data > root->data[1]) {
+            if ((char *) data == root->data[0]) {
+                printf("%d is founded\n", data);
+                return data;
+            }
+            search(root->right, data);
+        } else {
+            {
+                printf("%d is founded\n", data);
+                return data;
+            }
         }
-
-        else if((char *) data > root->data[1]){
-            if((char *) data == root->data[0] || (char *) data == root->data[1] ){
-                printf("%d is founded\n",data);
-                return data;
-            }
-            search(root->right,data);
-        } else
-            {
-                printf("%d is founded\n",data);
-                return data;
-            }
-    }
-
-    else if(root->data[0] && root->data[1] == NULL)
-    {
-        if((char *) data < root->data[0]){
-            if((char *) data == root->data[0])
-            {
-                printf("%d is founded\n",data);
-                return data;
-            }            search(root->left,data);
-        }
-        else if((char *) data > root->data[1]){
-            if((char *) data == root->data[0])
-            {
-                printf("%d is founded\n",data);
-                return data;
-            }            search(root->right,data);
-        } else{
-            {
-                printf("%d is founded\n",data);
-                return data;
-            }        }
     } else
         return data;
 }
 
-Node *rightRotate(Node *root){
+Node *rightRotate(Node *root) {
     Node *temp = root->left;
     Node *temp1 = temp->right;
 
@@ -116,38 +105,36 @@ Node *leftRotate(Node *root) {
     return temp;
 }
 
-int diffRNL(Node *root){
-    if(root == NULL)
+int diffRNL(Node *root) {
+    if (root == NULL)
         return 0;
     return findHeight(root->left) - findHeight(root->right);
 }
 
-Node *createNode(int data){
-    int i=0;
+Node *createNode(int data) {
+    int i = 0;
     Node *root = malloc(sizeof(Node));
     root->left = root->middle = root->right = NULL;
 
-    for(;i<3;i++){
+    for (; i < 3; i++) {
         root->data[i] = NULL;
     }
 
-    root->data[CAP-3] = (char *) data;
+    root->data[CAP - 3] = (char *) data;
     root->height = 1;
 
     return root;
 }
 
-Node *sortNode(Node *root){
-    int a,i,j;
-    if(root->data[0] && root->data[1] && root->data[2] && ((root->data[0] > root->data[1]) || (root->data[1] > root->data[2])))
-        for (i = 0; i < 3; ++i)
-        {
+Node *sortNode(Node *root) {
+    int a, i, j;
+    if (root->data[0] && root->data[1] && root->data[2] &&
+        ((root->data[0] > root->data[1]) || (root->data[1] > root->data[2])))
+        for (i = 0; i < 3; ++i) {
 
-            for (j = i + 1; j < 3; ++j)
-            {
+            for (j = i + 1; j < 3; ++j) {
 
-                if (root->data[i] > root->data[j])
-                {
+                if (root->data[i] > root->data[j]) {
                     a = (int) root->data[i];
                     root->data[i] = root->data[j];
                     root->data[j] = (char *) a;
@@ -157,15 +144,12 @@ Node *sortNode(Node *root){
             }
 
         }
-    else if(root->data[0] && root->data[1] && root->data[2] == NULL && root->data[0] > root->data[1])
-        for (i = 0; i < 2; ++i)
-        {
+    else if (root->data[0] && root->data[1] && root->data[2] == NULL && root->data[0] > root->data[1])
+        for (i = 0; i < 2; ++i) {
 
-            for (j = i + 1; j < 2; ++j)
-            {
+            for (j = i + 1; j < 2; ++j) {
 
-                if (root->data[i] > root->data[j])
-                {
+                if (root->data[i] > root->data[j]) {
                     a = (int) root->data[i];
                     root->data[i] = root->data[j];
                     root->data[j] = (char *) a;
@@ -179,7 +163,7 @@ Node *sortNode(Node *root){
     return root;
 }
 
-Node *splitNode(Node *root){
+Node *splitNode(Node *root) {
     // IF LEAF IS ROOT
     /*
      make middleKey into a 2-node (which will be the new root)
@@ -190,9 +174,8 @@ Node *splitNode(Node *root){
 
         redistribute children
      */
-    if (root->data[0] != NULL && root->data[1] != NULL && root->data[2] != NULL)
-    {
-        Node *temp,*temp1,*temp2;
+    if (root->data[0] != NULL && root->data[1] != NULL && root->data[2] != NULL) {
+        Node *temp, *temp1, *temp2;
         temp = createNode((int) root->data[1]);
         temp1 = createNode((int) root->data[2]);
         temp2 = createNode((int) root->data[0]);
@@ -206,50 +189,47 @@ Node *splitNode(Node *root){
         return temp;
     }
 }
-Node *addNode(Node *root,int data){
+
+Node *addNode(Node *root, int data) {
 
     if (root == NULL)
-        return(createNode(data));
+        return (createNode(data));
 
     if ((char *) data < root->data[0]) {
 
         if (root->data[CAP - 3] != NULL && root->data[CAP - 2] == NULL && root->data[CAP - 1] == NULL) {
-                if (root->left == NULL) {
-                    root->data[1] = (char *) data;
+            if (root->left == NULL) {
+                root->data[1] = (char *) data;
+                root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
+                root->left = NULL;
+            } else {
+                if (root->left->data[0] != NULL && root->left->data[1] != NULL) {
+                    root->left->data[2] = (char *) data;
                     root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
-                    root->left = NULL;
-                } else {
-                    if (root->left->data[0] != NULL && root->left->data[1] != NULL) {
-                        root->left->data[2] = (char *) data;
-                        root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
-                        if (root->left->data[0] > root->left->data[1] || root->left->data[1] > root->left->data[2])
-                            sortNode(root->left);
-                        root->left = splitNode(root->left);
-                    } else if (root->left->data[0] != NULL && root->left->data[1] == NULL) {
-                        root->left->data[1] = (char *) data;
-                        root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
-                        if (root->left->data[0] > root->left->data[1] || root->left->data[1] > root->left->data[2])
-                            root->left = sortNode(root->left);
-                    }
+                    if (root->left->data[0] > root->left->data[1] || root->left->data[1] > root->left->data[2])
+                        sortNode(root->left);
+                    root->left = splitNode(root->left);
+                } else if (root->left->data[0] != NULL && root->left->data[1] == NULL) {
+                    root->left->data[1] = (char *) data;
+                    root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
+                    if (root->left->data[0] > root->left->data[1] || root->left->data[1] > root->left->data[2])
+                        root->left = sortNode(root->left);
                 }
-
             }
-        else if ((char *) data < root->data[CAP-3]){
-            if(root->right->data[0] != NULL && root->right->data[1] != NULL){
+
+        } else if ((char *) data < root->data[CAP - 3]) {
+            if (root->right->data[0] != NULL && root->right->data[1] != NULL) {
                 root->left->data[2] = (char *) data;
                 root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
-                if(root->left->data[0] > root->left->data[1] || root->left->data[1] > root->left->data[2])
+                if (root->left->data[0] > root->left->data[1] || root->left->data[1] > root->left->data[2])
                     root->left = sortNode(root->left);
                 root->left = splitNode(root->left);
             }
 
-        }
-        else if (root->right != NULL)
+        } else if (root->right != NULL)
             root->right = addNode(root->right, data);
-    }
-
-    else if ((char *) data > root->data[0]) {
-        if(root->data[CAP-3] != NULL && root->data[CAP-2] != NULL && root->data[CAP-1] == NULL) {
+    } else if ((char *) data > root->data[0]) {
+        if (root->data[CAP - 3] != NULL && root->data[CAP - 2] != NULL && root->data[CAP - 1] == NULL) {
             if ((char *) data > root->data[CAP - 2]) {
                 root->data[2] = (char *) addNode(root->right, data)->data[0];
                 root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
@@ -257,73 +237,58 @@ Node *addNode(Node *root,int data){
                 return root;
 
             }
-        }
-        else if(root->data[CAP-3] != NULL && root->data[CAP-2] == NULL && root->data[CAP-1] == NULL)
-            {
-            if((char *) data > root->data[CAP - 3]){
-                if(root->right == NULL)
-                {
+        } else if (root->data[CAP - 3] != NULL && root->data[CAP - 2] == NULL && root->data[CAP - 1] == NULL) {
+            if ((char *) data > root->data[CAP - 3]) {
+                if (root->right == NULL) {
                     root->data[1] = (char *) data;
                     root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
                     root->right = NULL;
-                }
-
-                else{
-                    if(root->right->data[0] != NULL && root->right->data[1] != NULL){
+                } else {
+                    if (root->right->data[0] != NULL && root->right->data[1] != NULL) {
                         root->right->data[2] = (char *) data;
                         root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
-                        if(root->right->data[0] > root->right->data[1] || root->right->data[1] > root->right->data[2])
+                        if (root->right->data[0] > root->right->data[1] || root->right->data[1] > root->right->data[2])
                             root->right = sortNode(root->right);
                         root->right = splitNode(root->right);
-                    }
-
-                    else if(root->right->data[0] != NULL && root->right->data[1] == NULL){
+                    } else if (root->right->data[0] != NULL && root->right->data[1] == NULL) {
                         root->right->data[1] = (char *) data;
                         root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
-                        if(root->right->data[0] > root->right->data[1] || root->right->data[1] > root->right->data[2])
+                        if (root->right->data[0] > root->right->data[1] || root->right->data[1] > root->right->data[2])
                             root->right = sortNode(root->right);
                     }
                 }
 
             }
-        }
-
-        else if(root->right != NULL)
-             root->right = addNode(root->right, data);
-    }
-
-    else if ((char *) data > root->data[0] && (char *) data < root->data[1]){
-        if(root->data[CAP-3] != NULL && root->data[CAP-2] == NULL && root->data[CAP-1] == NULL) {
-                if (root->middle == NULL) {
-                    root->data[2] = (char *) data;
+        } else if (root->right != NULL)
+            root->right = addNode(root->right, data);
+    } else if ((char *) data > root->data[0] && (char *) data < root->data[1]) {
+        if (root->data[CAP - 3] != NULL && root->data[CAP - 2] == NULL && root->data[CAP - 1] == NULL) {
+            if (root->middle == NULL) {
+                root->data[2] = (char *) data;
+                root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
+                sortNode(root);
+                root->middle = NULL;
+            } else {
+                if (root->middle->data[0] != NULL && root->middle->data[1] != NULL) {
+                    root->middle->data[2] = (char *) data;
                     root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
-                    sortNode(root);
-                    root->middle = NULL;
-                } else {
-                    if (root->middle->data[0] != NULL && root->middle->data[1] != NULL) {
-                        root->middle->data[2] = (char *) data;
-                        root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
-                        if (root->middle->data[0] > root->middle->data[1] || root->middle->data[1] > root->middle->data[2])
-                            sortNode(root->left);
-                    } else if (root->middle->data[0] != NULL && root->middle->data[0] == NULL) {
-                        root->left->data[1] = (char *) data;
-                        root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
-                        if (root->left->data[0] > root->middle->data[1] || root->middle->data[1] > root->middle->data[2])
-                            sortNode(root->left);
-                    }
+                    if (root->middle->data[0] > root->middle->data[1] || root->middle->data[1] > root->middle->data[2])
+                        sortNode(root->left);
+                } else if (root->middle->data[0] != NULL && root->middle->data[0] == NULL) {
+                    root->left->data[1] = (char *) data;
+                    root->height = MAX(findHeight(root->left), findHeight(root->right)) + 1;
+                    if (root->left->data[0] > root->middle->data[1] || root->middle->data[1] > root->middle->data[2])
+                        sortNode(root->left);
                 }
             }
-        else if ((char *) data > root->data[CAP-3] && (char *) data < root->data[CAP-2]){
+        } else if ((char *) data > root->data[CAP - 3] && (char *) data < root->data[CAP - 2]) {
             root->data[1] = (char *) addNode(root->middle, data)->data[0];
             root->middle = NULL;
             root = splitNode(root);
             return root;
-        }
-        else if(root->middle != NULL)
+        } else if (root->middle != NULL)
             root->middle = addNode(root->middle, data);
-    }
-
-    else
+    } else
         return root;
 
     return root;
@@ -336,8 +301,8 @@ Node *checkNodes(Node *root) {
         Node *tL = root;
         while (tR->right) {
             tR = tR->right;
-            if (tR->data[0] != NULL && tR->data[1] == NULL){
-                if(diffRNL(root) >= 1){
+            if (tR->data[0] != NULL && tR->data[1] == NULL) {
+                if (diffRNL(root) >= 1) {
                     if (root->data[0] != NULL && root->data[1] == NULL) {
                         root->data[1] = tR->data[0];
                         root->right = tR->right;
@@ -351,9 +316,8 @@ Node *checkNodes(Node *root) {
                         root = splitNode(root);
                     }
                 }
-            }
-            else if(tR->data[0] != NULL && tR->data[1] != NULL){
-                if(root->right->data[0] != NULL && root->right->data[1] == NULL)
+            } else if (tR->data[0] != NULL && tR->data[1] != NULL) {
+                if (root->right->data[0] != NULL && root->right->data[1] == NULL)
                     root->right->data[1] = root->right->right->data[0];
             }
 
@@ -362,7 +326,7 @@ Node *checkNodes(Node *root) {
         while (tL->left) {
             tL = tL->left;
 
-            if (tL->data[0] != NULL && tL->data[1] == NULL){
+            if (tL->data[0] != NULL && tL->data[1] == NULL) {
                 if (diffRNL(root) <= -1) {
                     if (root->data[0] != NULL && root->data[1] == NULL) {
                         root->data[1] = tL->data[0];
@@ -377,11 +341,9 @@ Node *checkNodes(Node *root) {
                         root = splitNode(root);
                     }
                 }
-            }
-
-            else if(tL->data[0] != NULL && tL->data[1] != NULL){
-                    if(root->left->data[0] != NULL && root->left->data[1] == NULL)
-                        root->left->data[1] = root->left->left->data[0];
+            } else if (tL->data[0] != NULL && tL->data[1] != NULL) {
+                if (root->left->data[0] != NULL && root->left->data[1] == NULL)
+                    root->left->data[1] = root->left->left->data[0];
             }
 
 
@@ -392,31 +354,31 @@ Node *checkNodes(Node *root) {
     }
 }
 
-void preOrder(Node *root){
-    if(root != NULL){
-        printf("%s",root->data[0]);
+void preOrder(Node *root) {
+    if (root != NULL) {
+        printf("%s", root->data[0]);
         preOrder(root->left);
         preOrder(root->right);
     }
 }
 
-void inOrder(Node *root){
-    if(root != NULL){
+void inOrder(Node *root) {
+    if (root != NULL) {
         inOrder(root->left);
         printf("%d ", root->data);
         inOrder(root->right);
     }
 }
 
-void postOrder(Node *root){
-    if(root != NULL){
-        if(root->data[0] != NULL && root->data[1] == NULL)
-            printf("%d ",root->data[0]);
+void postOrder(Node *root) {
+    if (root != NULL) {
+        if (root->data[0] != NULL && root->data[1] == NULL)
+            printf("%d ", root->data[0]);
 
-        else if(root->data[0] != NULL && root->data[1] != NULL && root->data[2] == NULL){
+        else if (root->data[0] != NULL && root->data[1] != NULL && root->data[2] == NULL) {
             postOrder(root->left);
             postOrder(root->right);
-            printf("%d %d ", root->data[0],root->data[1]);
+            printf("%d %d ", root->data[0], root->data[1]);
         }
 
         postOrder(root->left);
@@ -446,7 +408,7 @@ int main(void) {
     //search(root,1);
     root = addNode(root, 1);
     root = checkNodes(root);
-    search(root,31);
+    search(root, 31);
     postOrder(root);
 
 
